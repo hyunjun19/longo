@@ -20,7 +20,7 @@ function saveBuket(req) {
             userRequestLog.createdAt = new Date();
             userRequestLog.save(function(err) {
                 if (err) throw err;
-                console.log('user-request-logs saved successfully!');
+                //console.log('user-request-logs saved successfully!');
             });
             break;
         default:

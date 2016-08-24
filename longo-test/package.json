@@ -1,0 +1,17 @@
+{
+  "name": "longo-test",
+  "version": "0.0.1",
+  "description": "for longo test project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.0.1",
+    "lodash": "^4.15.0",
+    "request": "^2.74.0",
+    "request-promise": "^4.1.1"
+  }
+}
