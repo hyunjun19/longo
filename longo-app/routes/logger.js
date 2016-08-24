@@ -6,15 +6,15 @@ router.get('/', function(req, res, next) {
     res.send('logger is ready.');
 });
 
-router.post('/:buket', function(req, res, next) {
+router.post('/:bucket', function(req, res, next) {
     res.header('x-response-status', 'OK');
     res.sendStatus(204);
 
-    saveBuket(req);
+    saveBucket(req);
 });
 
-function saveBuket(req) {
-    switch (req.params.buket) {
+function saveBucket(req) {
+    switch (req.params.bucket) {
         case 'user-request-log':
             var userRequestLog = new UserRequestLog(req.body);
             userRequestLog.createdAt = new Date();
@@ -24,7 +24,7 @@ function saveBuket(req) {
             });
             break;
         default:
-            console.log(req.params.buket + ' buket is Unknown.');
+            console.log(req.params.bucket + ' bucket is Unknown.');
             break;
     }
 }
