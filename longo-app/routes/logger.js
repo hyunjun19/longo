@@ -18,9 +18,9 @@ function saveBucket(req) {
         case 'user-request-log':
             var userRequestLog = new UserRequestLog(req.body);
             userRequestLog.createdAt = new Date();
-            userRequestLog.save(function(err) {
+            userRequestLog.save(function(err, userRequestLog) {
                 if (err) throw err;
-                //console.log('user-request-logs saved successfully!');
+                // console.log('user-request-logs ' + userRequestLog._id + ' saved successfully!');
             });
             break;
         default:
