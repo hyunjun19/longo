@@ -10,8 +10,7 @@ setInterval(()=>{
     let startTime = new Date();
     _.times(loopCnt, (idx) => {
         rp({
-            uri   : 'http://220.70.71.58:10390/logger/user-request-log',
-            // uri   : 'http://localhost:10390/logger/user-request-log',
+            uri   : 'http://localhost:10390/logger/user-request-log',
             header: {
                 'Content-Type': 'application/json'
             },
