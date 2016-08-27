@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Whitelist the following IPs
-var ips = ['127.0.0.1'];
+var ips = ['127.0.0.1', '::1'];
 
 app.use(ipfilter(ips, {mode: 'allow'}));
 
