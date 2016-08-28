@@ -1,14 +1,14 @@
 var express      = require('express');
 var path         = require('path');
 var favicon      = require('serve-favicon');
-var logger       = require('morgan');
+var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var mongoose     = require('mongoose');
-var ipfilter     = require('express-ipfilter')
+var ipfilter     = require('express-ipfilter');
 
-var routes = require('./routes/index');
-var logger = require('./routes/logger');
+var routesIndex  = require('./routes/index');
+var routesLogger = require('./routes/logger');
 
 var app = express();
 
@@ -20,7 +20,7 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-// app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -31,8 +31,8 @@ var ips = ['127.0.0.1', '::1'];
 
 app.use(ipfilter(ips, {mode: 'allow'}));
 
-app.use('/', routes);
-app.use('/logger', logger);
+app.use('/', routesIndex);
+app.use('/logger', routesLogger);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

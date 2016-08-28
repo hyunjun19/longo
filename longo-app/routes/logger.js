@@ -3,7 +3,24 @@ var router  = express.Router();
 var UserRequestLog = require('../models/user-request-log');
 
 router.get('/', function(req, res, next) {
-    res.send('logger is ready.');
+    if (!req.query.q) {
+        res.render('logger');
+        return;
+    }
+
+    try {
+        var query  = JSON.parse(req.query.q || '{}');
+        var column = JSON.parse(req.query.c || '{}');
+        var limit  = Number(req.query.limit) || 10;
+        UserRequestLog.find(query, column, function(err, logs){
+            if (err) throw err;
+
+            res.setHeader('Content-Type', 'application/json');
+            res.send(logs);
+        }).limit(limit);
+    } catch(ex) {
+        res.sendStatus(400);
+    }
 });
 
 router.post('/:bucket', function(req, res, next) {
