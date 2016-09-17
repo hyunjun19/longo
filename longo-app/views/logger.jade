@@ -2,6 +2,6 @@ extends layout
 
 block content
   h1 use queryString.
-  p ex) http://localhost:10390/logger?q={"uri":"/api/v1/banners","requestDateTime":{"$gte":"20160825200000"}}&c={"userId":1,"sessionKey":1}&limit=10',
+  p ex) http://localhost:10390/log/local/user-request-log?q={"uri":"/api/v1/banners","requestDateTime":{"$gte":"20160825200000"}}&c={"userId":1,"sessionKey":1}&limit=10',
   p ref)
     a(href='https://docs.mongodb.com/manual/reference/sql-comparison/') https://docs.mongodb.com/manual/reference/sql-comparison/

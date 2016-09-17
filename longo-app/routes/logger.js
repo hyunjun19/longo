@@ -21,6 +21,7 @@ router.get('/:phase/:bucket', function(req, res) {
             });
     } catch(ex) {
         res.sendStatus(400);
+        console.log(ex);
     }
 });
 

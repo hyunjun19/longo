@@ -9,8 +9,8 @@ var ipfilter     = require('express-ipfilter');
 var monk = require('monk');
 var db = monk('mongodb://localhost:27017/longo');
 
-var routesIndex  = require('./routes/index');
-var routesLogger = require('./routes/logger');
+var routesIdx = require('./routes/index');
+var routesLog = require('./routes/logger');
 
 var app = express();
 
@@ -36,8 +36,8 @@ app.use(function(req,res,next){
     next();
 });
 
-app.use('/', routesIndex);
-app.use('/logger', routesLogger);
+app.use('/',    routesIdx);
+app.use('/log', routesLog);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
