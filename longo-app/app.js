@@ -4,15 +4,15 @@ var favicon      = require('serve-favicon');
 var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
-var mongoose     = require('mongoose');
 var ipfilter     = require('express-ipfilter');
+
+var monk = require('monk');
+var db = monk('mongodb://localhost:27017/longo');
 
 var routesIndex  = require('./routes/index');
 var routesLogger = require('./routes/logger');
 
 var app = express();
-
-mongoose.connect('mongodb://localhost/gajago');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,10 +26,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Whitelist the following IPs
+// white list the following IPs
 var ips = ['127.0.0.1', '::1'];
 
 app.use(ipfilter(ips, {mode: 'allow'}));
+
+app.use(function(req,res,next){
+    req.db = db;
+    next();
+});
 
 app.use('/', routesIndex);
 app.use('/logger', routesLogger);
@@ -46,7 +51,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use(function(err, req, res) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -57,7 +62,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,

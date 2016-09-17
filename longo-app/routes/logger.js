@@ -1,8 +1,9 @@
+'use strict';
+
 var express = require('express');
 var router  = express.Router();
-var UserRequestLog = require('../models/user-request-log');
 
-router.get('/', function(req, res, next) {
+router.get('/:phase/:bucket', function(req, res) {
     if (!req.query.q) {
         res.render('logger');
         return;
@@ -12,38 +13,39 @@ router.get('/', function(req, res, next) {
         var query  = JSON.parse(req.query.q || '{}');
         var column = JSON.parse(req.query.c || '{}');
         var limit  = Number(req.query.limit) || 10;
-        UserRequestLog.find(query, column, function(err, logs){
-            if (err) throw err;
-
-            res.setHeader('Content-Type', 'application/json');
-            res.send(logs);
-        }).limit(limit);
+        var collection = getCollection(req.db, req.params.phase, req.params.bucket);
+        collection
+            .find(query, { 'fields': column, 'limit': limit })
+            .then(function(docs){
+                res.send(docs);
+            });
     } catch(ex) {
         res.sendStatus(400);
     }
 });
 
-router.post('/:bucket', function(req, res, next) {
+router.post('/:phase/:bucket', function(req, res) {
+    if (!req.params.phase || !req.params.bucket) {
+        res.sendStatus(400);
+        return;
+    }
+
     res.header('x-response-status', 'OK');
     res.sendStatus(204);
 
-    saveBucket(req);
+    saveBucketQuietly(req);
 });
 
-function saveBucket(req) {
-    switch (req.params.bucket) {
-        case 'user-request-log':
-            var userRequestLog = new UserRequestLog(req.body);
-            userRequestLog.createdAt = new Date();
-            userRequestLog.save(function(err, userRequestLog) {
-                if (err) throw err;
-                // console.log('user-request-logs ' + userRequestLog._id + ' saved successfully!');
-            });
-            break;
-        default:
-            console.log(req.params.bucket + ' bucket is Unknown.');
-            break;
-    }
+function saveBucketQuietly(req) {
+    var collection = getCollection(req.db, req.params.phase, req.params.bucket);
+    var doc = req.body;
+    doc.createAt = new Date();
+
+    collection.insert(doc);
+}
+
+function getCollection(db, phase, bucket) {
+    return db.get(phase + '::' + bucket);
 }
 
 module.exports = router;
