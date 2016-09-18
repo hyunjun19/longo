@@ -3,9 +3,13 @@
 var express = require('express');
 var router  = express.Router();
 
+router.get('/', function(req, res) {
+    res.render('log-query', { title: 'longo-query' });
+});
+
 router.get('/:phase/:bucket', function(req, res) {
     if (!req.query.q) {
-        res.render('logger');
+        res.render('log');
         return;
     }
 
@@ -37,16 +41,16 @@ router.post('/:phase/:bucket', function(req, res) {
     saveBucketQuietly(req);
 });
 
+function getCollection(db, phase, bucket) {
+    return db.get(phase + '::' + bucket);
+}
+
 function saveBucketQuietly(req) {
     var collection = getCollection(req.db, req.params.phase, req.params.bucket);
     var doc = req.body;
     doc.createAt = new Date();
 
     collection.insert(doc);
-}
-
-function getCollection(db, phase, bucket) {
-    return db.get(phase + '::' + bucket);
 }
 
 module.exports = router;

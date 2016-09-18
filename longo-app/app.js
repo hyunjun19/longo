@@ -10,7 +10,7 @@ var monk = require('monk');
 var db = monk('mongodb://localhost:27017/longo');
 
 var routesIdx = require('./routes/index');
-var routesLog = require('./routes/logger');
+var routesLog = require('./routes/log');
 
 var app = express();
 
