@@ -12,9 +12,9 @@
     "debug": "~2.2.0",
     "express": "~4.13.4",
     "express-ipfilter": "^0.1.1",
-    "jade": "~1.11.0",
     "monk": "^3.1.2",
     "morgan": "~1.7.0",
+    "pug": "^2.0.0-beta6",
     "serve-favicon": "~2.3.0"
   }
 }
