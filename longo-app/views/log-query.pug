@@ -73,6 +73,7 @@ block content
 
             function initResultGrid(dynamicColumns) {
                 resultGrid.setConfig({
+                    showLineNumber: true,
                     target: $('[data-ax5grid="result-grid"]'),
                     columns: dynamicColumns || [{ key: 'dummy', label: 'dummy' }]
                 });
