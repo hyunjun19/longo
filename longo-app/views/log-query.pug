@@ -8,21 +8,30 @@ block content
             fieldset
                 legend scheme
                 label phase:
-                    each phase in phases
-                        label
-                            input(type='radio', name='phase', value=phase.value)
-                            | #{phase.name}
-                hr
+                    select#phase(name='phase')
+                        each phase in phases
+                            option(value=phase.value) #{phase.name}
                 label bucket:
-                    each bucket in buckets
-                        label
-                            input(type='radio', name='bucket', value=bucket.value)
-                            | #{bucket.name}
-                hr
+                    select#bucket
+                        each bucket in buckets
+                            option(value=bucket.value) #{bucket.name}
                 label limit:
-                    input(id='limit', type='text', value=20)
+                    input(id='limit' type='text' value=20)
             fieldset
                 legend query
+                input#query-field(type='text' name='field' placeholder='field')
+                select#query-condition(name='condition')
+                    option(value='$eq')  =
+                    option(value='$gt')  >
+                    option(value='$gte') >=
+                    option(value='$lt')  <
+                    option(value='$lte') <=
+                    option(value='$ne')  !=
+                    option(value='$in')  Array IN
+                    option(value='$nin') Array NOT IN
+                input#query-value(type='text' name='value' placeholder='value')
+                button#btn-query-condition-add add
+                hr
                 textarea(id='q') {}
             fieldset
                 legend column
@@ -30,7 +39,7 @@ block content
     div(id='result-container')
         fieldset#res
             legend result
-            div(data-ax5grid='result-grid', data-ax5grid-config='{}', style='height:500px;')
+            div(data-ax5grid='result-grid' data-ax5grid-config='{}' style='height:500px;')
 
     script(type='text/javascript').
         $(function(){
@@ -44,9 +53,35 @@ block content
                 });
             }
 
-            $('#btn-query').click(function(e){
-                var phase  = $('[name="phase"]:checked').val();
-                var bucket = $('[name="bucket"]:checked').val();
+            $('#btn-query-condition-add').click(function(e){
+                e.preventDefault();
+
+                var $q = $('#q');
+                var queryField = $('#query-field').val();
+                var queryCondition = $('#query-condition').val();
+                var queryValue = $('#query-value').val();
+
+                if (_.isEmpty(queryField) || _.isEmpty(queryValue)) {
+                    alert('field and value is require.');
+                    return;
+                }
+
+                var q = {};
+                try {
+                    q = JSON.parse($q.val() || '{}');
+                } catch(ex) {
+                    console.error('#q JSON.parse fail.', ex);
+                }
+
+                q[queryField] = {};
+                q[queryField][queryCondition] = queryValue;
+
+                $q.val(JSON.stringify(q, null, 4));
+            });
+
+            $('#btn-query').click(function(){
+                var phase  = $('#phase').val();
+                var bucket = $('#bucket').val();
                 if (_.isEmpty(phase) || _.isEmpty(bucket)) {
                     alert('select phase and bucket.');
                     return;
@@ -63,6 +98,7 @@ block content
 
                     if (_.isEmpty(res)) {
                         initResultGrid();
+                        resultGrid.setData([]);
                         return;
                     }
 
