@@ -1,7 +1,11 @@
 doctype html
 html
-  head
-    title #{title}
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+    head
+        title #{title}
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        link(rel='stylesheet', href='/libs/ax5ui/ax5ui.all.css')
+        script(type='text/javascript', src='/libs/jquery-3.1.0.min.js')
+        script(type='text/javascript', src='/libs/lodash.min.js')
+        script(type='text/javascript', src='/libs/ax5ui/ax5ui.all.js')
+    body
+        block content

@@ -1,10 +1,30 @@
 'use strict';
 
-var express = require('express');
-var router  = express.Router();
+const express = require('express');
+const _       = require('lodash');
+const async   = require('async');
+const router  = express.Router();
 
 router.get('/', function(req, res) {
-    res.render('log-query', { title: 'longo-query' });
+    async.parallel({
+        phases: function(callback){
+            req.db.get('phases')
+                .find({}, { sort: { order: 1 } })
+                .then(function (docs) {
+                    callback(null, docs);
+                });
+        },
+        buckets: function(callback){
+            req.db.get('buckets')
+                .find({}, { sort: { order: 1 } })
+                .then(function (docs) {
+                    callback(null, docs);
+                });
+        }
+    }, function(err, results) {
+        let ret = _.merge({ title: 'longo-query' }, results);
+        res.render('log-query', ret);
+    });
 });
 
 router.get('/:phase/:bucket', function(req, res) {

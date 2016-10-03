@@ -8,10 +8,16 @@ block content
             fieldset
                 legend scheme
                 label phase:
-                    input(id='phase', type='text', value='local' placeholder='phase. ex) local | alpha | beta | production')
+                    each phase in phases
+                        label
+                            input(type='radio', name='phase', value=phase.value)
+                            | #{phase.name}
                 hr
                 label bucket:
-                    input(id='bucket', type='text', value='user-request-log' placeholder='bucket. ex) user-request-log | api-external')
+                    each bucket in buckets
+                        label
+                            input(type='radio', name='bucket', value=bucket.value)
+                            | #{bucket.name}
                 hr
                 label limit:
                     input(id='limit', type='text', value=20)
@@ -22,29 +28,53 @@ block content
                 legend column
                 textarea(id='c') {}
     div(id='result-container')
-        fieldset
+        fieldset#res
             legend result
-            label total count:
-                span(id='total-count') 0
-                span 건
-            textarea(id='res', style='height:400px;')
+            div(data-ax5grid='result-grid', data-ax5grid-config='{}', style='height:500px;')
 
-    script(type='text/javascript', src='https://cdn.jsdelivr.net/jquery/3.1.0/jquery.min.js')
     script(type='text/javascript').
-        $('#btn-query').click(function(e){
-            var url = '/log/' + $('#phase').val() + '/' + $('#bucket').val();
-            var data = {
-                q: $('#q').val(),
-                c: $('#c').val(),
-                limit: $('#limit').val()
-            };
-            $.get(url, data, function(res){
-                location.href = '#res';
-                $('#total-count').text(res.length);
-                $('#res').val(JSON.stringify(res, null, 4));
-            }).fail(function(res){
-                location.href = '#res';
-                $('#total-count').text(0);
-                $('#res').val(JSON.stringify(res, null, 4));
+        $(function(){
+            var resultGrid = new ax5.ui.grid();
+            initResultGrid();
+
+            function initResultGrid(dynamicColumns) {
+                resultGrid.setConfig({
+                    target: $('[data-ax5grid="result-grid"]'),
+                    columns: dynamicColumns || [{ key: 'dummy', label: 'dummy' }]
+                });
+            }
+
+            $('#btn-query').click(function(e){
+                var phase  = $('[name="phase"]:checked').val();
+                var bucket = $('[name="bucket"]:checked').val();
+                if (_.isEmpty(phase) || _.isEmpty(bucket)) {
+                    alert('select phase and bucket.');
+                    return;
+                }
+
+                var url = '/log/' + phase + '/' + bucket;
+                var data = {
+                    q: $('#q').val(),
+                    c: $('#c').val(),
+                    limit: $('#limit').val()
+                };
+                $.get(url, data, function(res){
+                    location.href = '#res';
+
+                    if (_.isEmpty(res)) {
+                        initResultGrid();
+                        return;
+                    }
+
+                    var dynamicColumns = _.map(res[0], function(val, key){
+                        return { 'key': key, 'label': key };
+                    });
+                    initResultGrid(dynamicColumns);
+                    resultGrid.setData(res);
+                }).fail(function(res){
+                    location.href = '#res';
+                    initResultGrid([{ key: 'error', label: 'error' }]);
+                    resultGrid.setData([ { error: res } ]);
+                });
             });
         });

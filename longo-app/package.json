@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "pm2 start ./bin/www --name longo --watch -i 1 && pm2 logs longo --timestamp='YYYY-MM-DD HH:mm:ss'",
+    "start": "pm2 start ./bin/www --name longo --watch && pm2 logs longo --timestamp='YYYY-MM-DD HH:mm:ss'",
     "stop": "pm2 stop longo --watch 0 && pm2 delete longo"
   },
   "dependencies": {
+    "async": "^2.0.1",
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
