@@ -5,7 +5,7 @@ block content
     p
         a(href='https://docs.mongodb.com/manual/reference/operator/query/' target='_blank') mongodb query docs
     div#query-container.row
-        form#form-query.form-horizontal
+        form#form-query.form-horizontal(onsubmit='return false;')
             div.col-sm-6
                 div.form-group
                     label.col-sm-2.control-label(for='phase') phase
@@ -65,6 +65,12 @@ block content
             var resultGrid = new ax5.ui.grid();
             initResultGrid();
 
+            ax5.ui.grid.formatter['json'] = function () {
+                if (_.isEmpty(this.value)) return this.value;
+
+                return JSON.stringify(this.value);
+            };
+
             function initResultGrid(dynamicColumns) {
                 resultGrid.setConfig({
                     target: $('[data-ax5grid="result-grid"]'),
@@ -122,7 +128,7 @@ block content
                     }
 
                     var dynamicColumns = _.map(res[0], function(val, key){
-                        return { 'key': key, 'label': key };
+                        return { 'key': key, 'label': key, 'formatter': 'json' };
                     });
                     initResultGrid(dynamicColumns);
                     resultGrid.setData(res);
