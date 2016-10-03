@@ -2,41 +2,60 @@ extends layout
 
 block content
     h1 longo query
-    div(id='query-container')
-        button(id='btn-query' style='font-size:1.2em;') query
-        form(id='form-query')
-            fieldset
-                legend scheme
-                label phase:
-                    select#phase(name='phase')
-                        each phase in phases
-                            option(value=phase.value) #{phase.name}
-                label bucket:
-                    select#bucket
-                        each bucket in buckets
-                            option(value=bucket.value) #{bucket.name}
-                label limit:
-                    input(id='limit' type='text' value=20)
-            fieldset
-                legend query
-                input#query-field(type='text' name='field' placeholder='field')
-                select#query-condition(name='condition')
-                    option(value='$eq')  =
-                    option(value='$gt')  >
-                    option(value='$gte') >=
-                    option(value='$lt')  <
-                    option(value='$lte') <=
-                    option(value='$ne')  !=
-                    option(value='$in')  Array IN
-                    option(value='$nin') Array NOT IN
-                input#query-value(type='text' name='value' placeholder='value')
-                button#btn-query-condition-add add
-                hr
-                textarea(id='q') {}
-            fieldset
-                legend column
-                textarea(id='c') {}
-    div(id='result-container')
+    p
+        a(href='https://docs.mongodb.com/manual/reference/operator/query/' target='_blank') mongodb query docs
+    div#query-container.row
+        form#form-query.form-horizontal
+            div.col-sm-6
+                div.form-group
+                    label.col-sm-2.control-label(for='phase') phase
+                    div.col-sm-10
+                        select#phase.form-control(name='phase')
+                            each phase in phases
+                                option(value=phase.value) #{phase.name}
+                div.form-group
+                    label.col-sm-2.control-label(for='bucket') bucket
+                    div.col-sm-10
+                        select#bucket.form-control
+                            each bucket in buckets
+                                option(value=bucket.value) #{bucket.name}
+                div.form-group
+                    label.col-sm-2.control-label(for='limit') limit
+                    div.col-sm-10
+                        input#limit.form-control(type='text' value=20)
+                div.form-group
+                    label.col-sm-2.control-label(for='q') query
+                    div.col-sm-10
+                        textarea#q.form-control(rows='3' style='width:100%;') {}
+                button#btn-query.btn.btn-primary.btn-block query
+            div.col-sm-6
+                div.form-group
+                    label.col-sm-2.control-label(for='query-field') field
+                    div.col-sm-10
+                        input#query-field.form-control(type='text' name='field' placeholder='field')
+                div.form-group
+                    label.col-sm-2.control-label(for='query-condition') condition
+                    div.col-sm-10
+                        select#query-condition.form-control(name='condition')
+                            option(value='$eq')    =
+                            option(value='$gt')    >
+                            option(value='$gte')   >=
+                            option(value='$lt')    <
+                            option(value='$lte')   <=
+                            option(value='$ne')    !=
+                            option(value='$in')    Array IN
+                            option(value='$nin')   Array NOT IN
+                            option(value='$regex') LIKE(regex)
+                div.form-group
+                    label.col-sm-2.control-label(for='query-value') value
+                    div.col-sm-10
+                        input#query-value.form-control(type='text' name='value' placeholder='value')
+                div.form-group
+                    label.col-sm-2.control-label(for='c') column
+                    div.col-sm-10
+                        textarea#c.form-control(rows='3' style='width:100%;') {}
+                button#btn-query-condition-add.btn.btn-default.btn-block apply
+    div#result-container.row
         fieldset#res
             legend result
             div(data-ax5grid='result-grid' data-ax5grid-config='{}' style='height:500px;')

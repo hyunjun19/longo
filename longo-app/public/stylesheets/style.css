@@ -1,17 +1,3 @@
 body {
-  padding: 50px;
-  font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-a {
-  color: #00B7FF;
-}
-
-input {
-    /*width: 300px;*/
-}
-
-textarea {
-    width: 100%;
-    min-height: 200px;
+  padding: 20px;
 }
