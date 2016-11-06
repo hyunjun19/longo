@@ -1,0 +1,47 @@
+extends layout
+
+block content
+    div(data-ax5layout="ax1" data-config="{layout:'dock-panel'}")
+        #layout-top(data-dock-panel="{dock:'top', height:40}")
+            h3 longo query see ->
+                a(href='https://docs.mongodb.com/manual/reference/operator/query/' target='_blank') mongodb query docs
+        #layout-left(data-dock-panel="{dock:'left', width:200, minWidth:100, maxWidth:400, split:true}")
+            .list
+                .phases
+                    h4 phases
+                    each phase in phases
+                        .radio
+                            label
+                                input(type="radio" name="phase" value=phase.value)
+                                | #{phase.name}
+                .buckets
+                    h4 buckets
+                    each bucket in buckets
+                        .radio
+                            label
+                                input(type="radio" name="bucket" value=bucket.value)
+                                | #{bucket.name}
+        #layout-center(data-dock-panel="{dock:'center'}")
+            div(data-ax5layout="ax1" data-config="{layout:'split-panel', orientation: 'horizontal'}")
+                .inline(data-split-panel="{height:34}")
+                    div.col-sm-3
+                        select#query-field.form-control(name='field')
+                    div.col-sm-2
+                        select#query-condition.form-control(name='condition')
+                            option(value='$eq')    =
+                            option(value='$gt')    >
+                            option(value='$gte')   >=
+                            option(value='$lt')    <
+                            option(value='$lte')   <=
+                            option(value='$ne')    !=
+                            option(value='$in')    Array IN
+                            option(value='$nin')   Array NOT IN
+                            option(value='$regex') LIKE(regex)
+                    div.col-sm-7
+                        input#query-value.form-control(type='text' name='value' placeholder='value')
+                div(data-split-panel="{height: '*'}")
+                    div(data-ax5grid='result-grid' data-ax5grid-config='{}' style='height:100%;')
+        #layout-bottom(data-dock-panel="{dock:'bottom', height:30, minHeight:30, split:true}" style="text-align:center;")
+            textarea#q(style='width:100%;height:100%;') {}
+block biz-js
+    script(type='text/javascript' src="/javascripts/query.js")

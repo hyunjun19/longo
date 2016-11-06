@@ -1,3 +1,25 @@
+html, body {
+    height: 100%;
+}
 body {
-  padding: 20px;
+    padding: 0;
+    margin: 0;
+}
+[data-ax5layout] {
+    height: 100%;
+}
+[data-ax5layout]>div[data-dock-panel] {
+    border: 1px solid #ccc;
+}
+[data-ax5layout] .inline div {
+    padding: 0;
+    margin: 0;
+}
+#layout-top h1,
+#layout-top h2,
+#layout-top h3 {
+    margin: 6px;
+}
+.list .phases, .list .buckets {
+    padding: 4px 8px;
 }

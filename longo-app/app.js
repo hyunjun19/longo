@@ -1,18 +1,20 @@
-var express      = require('express');
-var path         = require('path');
-var favicon      = require('serve-favicon');
-var morgan       = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser   = require('body-parser');
-var ipfilter     = require('express-ipfilter');
+'use strict';
+const express      = require('express');
+const path         = require('path');
+const favicon      = require('serve-favicon');
+const morgan       = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser   = require('body-parser');
+const ipfilter     = require('express-ipfilter');
 
-var monk = require('monk');
-var db = monk('mongodb://localhost:27017/longo');
+const monk = require('monk');
+const db = monk('mongodb://localhost:27017/longo');
 
-var routesIdx = require('./routes/index');
-var routesLog = require('./routes/log');
+const routesIdx   = require('./routes/index');
+const routesLog   = require('./routes/log');
+const routesQuery = require('./routes/query');
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -27,7 +29,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // white list the following IPs
-var ips = ['127.0.0.1', '::1'];
+const ips = ['127.0.0.1', '::1'];
 
 app.use(ipfilter(ips, {mode: 'allow'}));
 
@@ -36,8 +38,9 @@ app.use(function(req,res,next){
     next();
 });
 
-app.use('/',    routesIdx);
-app.use('/log', routesLog);
+app.use('/',      routesIdx);
+app.use('/log',   routesLog);
+app.use('/query', routesQuery);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

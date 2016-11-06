@@ -36,6 +36,7 @@ router.get('/:phase/:bucket', function(req, res) {
     try {
         var query  = JSON.parse(req.query.q || '{}');
         var column = JSON.parse(req.query.c || '{}');
+        var sort   = JSON.parse(req.query.s || '{}');
         var limit  = Number(req.query.limit) || 10;
         var collection = getCollection(req.db, req.params.phase, req.params.bucket);
         collection
@@ -61,16 +62,16 @@ router.post('/:phase/:bucket', function(req, res) {
     saveBucketQuietly(req);
 });
 
-function getCollection(db, phase, bucket) {
+const getCollection = (db, phase, bucket) => {
     return db.get(phase + '::' + bucket);
-}
+};
 
-function saveBucketQuietly(req) {
+const saveBucketQuietly =  (req) => {
     var collection = getCollection(req.db, req.params.phase, req.params.bucket);
     var doc = req.body;
     doc.createAt = new Date();
 
     collection.insert(doc);
-}
+};
 
 module.exports = router;
