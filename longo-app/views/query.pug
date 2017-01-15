@@ -37,8 +37,10 @@ block content
                             option(value='$in')    Array IN
                             option(value='$nin')   Array NOT IN
                             option(value='$regex') LIKE(regex)
-                    div.col-sm-7
+                    div.col-sm-6
                         input#query-value.form-control(type='text' name='value' placeholder='value')
+                    div.col-sm-1
+                        button(type="button" id="btn-query" class="btn btn-default" style="width:100%;height:34px;") query
                 div(data-split-panel="{height: '*'}")
                     div(data-ax5grid='result-grid' data-ax5grid-config='{}' style='height:100%;')
         #layout-bottom(data-dock-panel="{dock:'bottom', height:30, minHeight:30, split:true}" style="text-align:center;")

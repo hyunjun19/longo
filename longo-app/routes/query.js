@@ -29,8 +29,8 @@ router.get('/', function(req, res) {
 
 router.get('/:phase/:bucket', function(req, res) {
     try {
-        var query  = JSON.parse(req.query.query || '{}');
-        var sort   = JSON.parse(req.query.sort  || '{}');
+        var query  = JSON.parse(req.query.query  || '{}');
+        var sort   = JSON.parse(req.query.sort   || '{ "_id": -1 }');
         var limit  = _.toNumber(req.query.limit) || 1000;
         req.db.get(`${req.params.phase}::${req.params.bucket}`)
             .find(query, { 'limit': limit, 'sort': sort })

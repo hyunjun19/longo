@@ -11,7 +11,6 @@ const monk = require('monk');
 const db = monk('mongodb://localhost:27017/longo');
 
 const routesIdx   = require('./routes/index');
-const routesLog   = require('./routes/log');
 const routesQuery = require('./routes/query');
 
 const app = express();
@@ -39,7 +38,6 @@ app.use(function(req,res,next){
 });
 
 app.use('/',      routesIdx);
-app.use('/log',   routesLog);
 app.use('/query', routesQuery);
 
 // catch 404 and forward to error handler

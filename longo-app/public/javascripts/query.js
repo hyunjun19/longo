@@ -16,7 +16,7 @@
         query(phase, bucket);
     });
 
-    $('#query-condition, #query-value').on('change', function(){
+    $('#query-condition, #query-value, #btn-query').on('click change', function(){
         var phase     = $('[name="phase"]:checked').val();
         var bucket    = $('[name="bucket"]:checked').val();
         var field     = $('#query-field').val();
@@ -65,12 +65,18 @@
 
         $q.val(JSON.stringify(query, null, 4));
 
-        var url = '/query/' + phase + '/' + bucket;
+        var mask = new ax5.ui.mask();
+        var url  = '/query/' + phase + '/' + bucket;
         var data = {
             query: $q.val(),
             sort:  '',
             limit: ''
         };
+
+        mask.open({
+            target: $('[data-ax5grid="result-grid"]').get(0),
+            content: JSON.stringify(data, null, 4)
+        });
         $.get(url, data, function(res){
             if (_.isEmpty(res)) {
                 loadResultGrid();
@@ -91,6 +97,8 @@
         }).fail(function(res){
             loadResultGrid([{ key: 'error', label: 'error' }]);
             resultGrid.setData([ { error: res } ]);
+        }).always(function(){
+            mask.close();
         });
     }
 })(window, jQuery, _);
