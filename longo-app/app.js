@@ -13,6 +13,7 @@ const db = monk('mongodb://localhost:27017/longo');
 const routesIdx   = require('./routes/index');
 const routesLog   = require('./routes/log');
 const routesQuery = require('./routes/query');
+const WhatapAgent = require('whatap').NodeAgent;
 
 const app = express();
 
